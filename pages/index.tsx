@@ -17,7 +17,7 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({giftlist}) {
+export default function Home({giftlist}: {giftlist: Gift_List[]}) {
   const columns = [
     { key: "name", label: "NAME" },
     { key: "price", label: "PRICE" },

@@ -1,22 +1,30 @@
-export const giftlist: {
-    title: string;
-    source_url: string;
-    source_name: string;
-    source_logo_url: string;
-    tags: string[];
-    recipient: string;
-    date: string;
-    gifts: {
-        name: string;
-        image_url: string;
-        brand: string;
-        product_source_url: string;
-        giftsource_url: string;
-        description: string;
-        price: string;
-        source_info?: any;
-    }[]
-}[] = [
+import { Gift_List } from "./gifts_interface";
+
+export function generateGiftList() {
+	//the loop below loops through giftlist and appends the tags from the source of to each individual gift item
+	for (var i = 0; i < giftlist.length; i++) {
+		//loop through each gifts in giftlist and add to giftlist_full
+		for (var j = 0; j < giftlist[i].gifts.length; j++) {
+			//add the following properties to each gift in giftlist including title
+			// create a variable called source_info that includes all data from the current giftlist except for the gift property
+			var source_info = {
+			title: giftlist[i].title,
+			source_url: giftlist[i].source_url,
+			source_name: giftlist[i].source_name,
+			source_logo_url: giftlist[i].source_logo_url,
+			tags: giftlist[i].tags,
+			recipient: giftlist[i].recipient,
+			date: giftlist[i].date,
+			gifts: 'n/a'
+			}
+			//add source info to each gift
+			giftlist[i].gifts[j].source_info = source_info;
+		}
+	}
+	return giftlist;	  
+}
+
+export const giftlist: Gift_List[] = [
 
 {"title": "21 Valentine’s Day Gift Ideas That Will Impress Any Of The Women In Your Life", 
 	"source_url": "https://www.forbes.com/sites/forbes-personal-shopper/2022/02/02/valentines-day-gifts-for-her/?sh=27297ca26c79", 

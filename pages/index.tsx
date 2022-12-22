@@ -1,16 +1,23 @@
 import Head from 'next/head'
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
-import { giftlist } from '../database/gifts'
+import { generateGiftList} from '../database/gifts'
 import { Table, User, Text, Badge } from '@nextui-org/react';
 import Link from 'next/link';
-import { Key, ReactElement, JSXElementConstructor, ReactFragment } from 'react';
+import { Gift_List } from '../database/gifts_interface';
 
 const inter = Inter({ subsets: ['latin'] })
 
-export default function Home() {
+export async function getStaticProps() {
+  const giftlist = generateGiftList();
+  return {
+    props: {
+      giftlist,
+    },
+  }
+}
 
-
+export default function Home({giftlist}) {
   const columns = [
     { key: "name", label: "NAME" },
     { key: "price", label: "PRICE" },
@@ -18,31 +25,10 @@ export default function Home() {
     { key: "source_info", label: "SOURCE INFO" },
     { key: "source_info.tags", label: "TAGS" },
   ];
-
-
-  //the loop below loops through giftlist and appends the tags from the source of to each individual gift item
-  for (var i = 0; i < giftlist.length; i++) {
-    //loop through each gifts in giftlist and add to giftlist_full
-    for (var j = 0; j < giftlist[i].gifts.length; j++) {
-      //add the following properties to each gift in giftlist including title
-      // create a variable called source_info that includes all data from the current giftlist except for the gift property
-      var source_info = {
-        title: giftlist[i].title,
-        source_url: giftlist[i].source_url,
-        source_name: giftlist[i].source_name,
-        source_logo_url: giftlist[i].source_logo_url,
-        tags: giftlist[i].tags,
-        recipient: giftlist[i].recipient,
-        date: giftlist[i].date,
-        gifts: 'n/a'
-      }
-      //add source info to each gift
-      giftlist[i].gifts[j].source_info = source_info;
-    }
-  }
+  console.log(giftlist);
 
   const firstgift = giftlist[0].gifts;
-  console.log(firstgift);
+
 
   return (
     <>
@@ -92,7 +78,7 @@ export default function Home() {
                   />
                   <Text size={12}>
                     Source: <Link
-                      href={source_info.source_url}
+                      href={item.source_info.source_url}
                     >{item.source_info.title.substring(0, 30)} - {item.source_info.date}</Link>
                   </Text>
                 </Table.Cell>
